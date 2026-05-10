@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Sharad's Portfolio</title>
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Bebas Neue', 'cursive'],
+                        body: ['Syne', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    colors: {
+                        acid: '#e8ff00',
+                        flame: '#ff4d1c',
+                        ink: '#080808',
+                        surface: '#0f0f0f',
+                        border: '#1e1e1e',
+                        muted: '#4a4a4a',
+                        cream: '#f0ece4',
+                    },
+                    animation: {
+                        marquee: 'marquee 22s linear infinite',
+                        scrollline: 'scrollline 2s ease infinite',
+                        blink: 'blink 1.2s step-end infinite',
+                        fadeup: 'fadeup 0.8s ease forwards',
+                    },
+                    keyframes: {
+                        marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+                        scrollline: { '0%': { left: '-100%' }, '100%': { left: '100%' } },
+                        blink: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0' } },
+                        fadeup: { from: { opacity: '0', transform: 'translateY(30px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #080808;
+            color: #f0ece4;
+            font-family: 'Syne', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 200;
+            opacity: 0.35;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        /* Dot grid background */
+        .dot-grid {
+            background-image: radial-gradient(circle, #2a2a2a 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Line grid */
+        .line-grid {
+            background-image:
+                linear-gradient(rgba(232, 255, 0, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(232, 255, 0, 0.025) 1px, transparent 1px);
+            background-size: 64px 64px;
+        }
+
+        /* Clip path button */
+        .btn-clip {
+            clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+        }
+
+        /* Skill bar animation */
+        .skill-bar-fill {
+            transition: width 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #080808;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e8ff00;
+        }
+
+        /* AOS overrides */
+        [data-aos] {
+            pointer-events: none;
+        }
+
+        [data-aos].aos-animate {
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-ink text-cream font-body">
+
+    <!-- ═══════════════════════════════════════════════════
+       NAVBAR — fixed, glassmorphism
+  ════════════════════════════════════════════════════ -->
+    <nav
+        class="fixed top-0 left-0 right-0 z-[500] flex items-center justify-between px-8 py-5 border-b border-border bg-ink/85 backdrop-blur-md">
+        <!-- Logo -->
+        <a href="#home" class="font-display text-3xl tracking-widest text-acid">
+            SM<span class="text-cream">.</span>
+        </a>
+
+        <!-- Nav links -->
+        <div class="hidden md:flex items-center gap-10">
+            <a href="#home"
+                class="nav-item font-mono text-[0.68rem] tracking-[0.22em] uppercase text-muted hover:text-cream transition-colors duration-300 relative group">
+                Home
+                <span
+                    class="absolute -bottom-1 left-0 w-0 h-px bg-acid group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a href="#about"
+                class="nav-item font-mono text-[0.68rem] tracking-[0.22em] uppercase text-muted hover:text-cream transition-colors duration-300 relative group">
+                About
+                <span
+                    class="absolute -bottom-1 left-0 w-0 h-px bg-acid group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a href="#work"
+                class="nav-item font-mono text-[0.68rem] tracking-[0.22em] uppercase text-muted hover:text-cream transition-colors duration-300 relative group">
+                Work
+                <span
+                    class="absolute -bottom-1 left-0 w-0 h-px bg-acid group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a href="#skills"
+                class="nav-item font-mono text-[0.68rem] tracking-[0.22em] uppercase text-muted hover:text-cream transition-colors duration-300 relative group">
+                Skills
+                <span
+                    class="absolute -bottom-1 left-0 w-0 h-px bg-acid group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a href="#blog"
+                class="nav-item font-mono text-[0.68rem] tracking-[0.22em] uppercase text-muted hover:text-cream transition-colors duration-300 relative group">
+                Blog
+                <span
+                    class="absolute -bottom-1 left-0 w-0 h-px bg-acid group-hover:w-full transition-all duration-300"></span>
+            </a>
+            <a href="#contact"
+                class="font-mono text-[0.68rem] tracking-[0.22em] uppercase text-ink bg-acid px-5 py-2 btn-clip hover:bg-flame transition-colors duration-300">
+                Contact
+            </a>
+        </div>
+    </nav>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       01 — HERO
+  ════════════════════════════════════════════════════ -->
+    <section id="home"
+        class="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-28 pb-16 overflow-hidden line-grid">
+
+        <!-- Ghost number -->
+        <span
+            class="pointer-events-none select-none absolute right-[-1rem] top-1/2 -translate-y-1/2 font-display text-[22vw] leading-none text-transparent"
+            style="-webkit-text-stroke: 1px rgba(232,255,0,0.06)">01</span>
+
+        <!-- Eyebrow -->
+        <div class="flex items-center gap-4 mb-6" data-aos="fade-down" data-aos-duration="700">
+            <span class="w-10 h-px bg-acid"></span>
+            <span class="font-mono text-[0.65rem] tracking-[0.3em] uppercase text-acid"> Sharad is available for
+                Work</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-display leading-[0.88] tracking-wide mb-6" data-aos="fade-up" data-aos-duration="900"
+            data-aos-delay="100" style="font-size: clamp(4.5rem, 11vw, 10rem)">
+            <span class="text-transparent" style="-webkit-text-stroke: 2px #f0ece4">Creative</span><br />
+            <span class="text-acid"> MERN Stack <br> Developer</span><br />
+
+        </h1>
+
+        <!-- Sub -->
+        <p class="font-body text-muted max-w-sm leading-relaxed text-[0.95rem] mb-10" data-aos="fade-up"
+            data-aos-duration="800" data-aos-delay="250">
+            Aspiring MERN Stack Developer building modern and responsive web applications. </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-wrap items-center gap-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="380">
+            <a href="#work"
+                class="inline-block bg-acid text-ink font-mono text-[0.68rem] tracking-[0.22em] uppercase px-8 py-4 btn-clip hover:bg-flame transition-colors duration-300">
+                View My Work
+            </a>
+            <a href="#contact"
+                class="font-mono text-[0.68rem] tracking-[0.22em] uppercase text-cream border-b border-muted pb-1 hover:text-acid hover:border-acid transition-colors duration-300">
+                Let's Talk →
+            </a>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-8 md:left-16 flex items-center gap-4">
+            <div class="relative w-16 h-px bg-border overflow-hidden">
+                <span class="absolute top-0 h-full w-full bg-acid animate-scrollline"></span>
+            </div>
+            <span class="font-mono text-[0.6rem] tracking-[0.2em] uppercase text-muted">Scroll</span>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       MARQUEE STRIP
+  ════════════════════════════════════════════════════ -->
+    <div class="border-y border-border bg-surface overflow-hidden py-4">
+        <div class="flex gap-12 animate-marquee w-max">
+            <!-- duplicated for seamless loop -->
+            <template x-for="i in 2"><!-- plain HTML repeat below --></template>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Web Development
+                <span class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Creative Coding
+                <span class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Motion Design <span
+                    class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Branding <span
+                    class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Digital Strategy
+                <span class="text-acid mr-12">✦</span></span>
+            <!-- duplicate -->
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Web Development
+                <span class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Creative Coding
+                <span class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Motion Design <span
+                    class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Branding <span
+                    class="text-acid mr-12">✦</span></span>
+            <span class="font-display text-[1.05rem] tracking-[0.18em] text-muted whitespace-nowrap">Digital Strategy
+                <span class="text-acid mr-12">✦</span></span>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       02 — ABOUT
+  ════════════════════════════════════════════════════ -->
+    <section id="about" class="relative px-8 md:px-16 py-28 overflow-hidden dot-grid">
+
+        <!-- Ghost number -->
+        <span
+            class="pointer-events-none select-none absolute right-[-1rem] top-1/2 -translate-y-1/2 font-display text-[22vw] leading-none text-transparent"
+            style="-webkit-text-stroke: 1px rgba(232,255,0,0.05)">02</span>
+
+        <!-- Label -->
+        <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+            <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">About Me</span>
+            <span class="w-12 h-px bg-border"></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
+
+            <!-- Photo frame -->
+            <div class="relative aspect-[3/4] bg-surface border border-border overflow-hidden" data-aos="fade-right"
+                data-aos-duration="1000">
+
+                <!-- Image -->
+                <img src="./sm.png" alt="Profile" class="w-full h-full object-cover">
+
+                <!-- Corner brackets -->
+                <span class="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-acid z-10"></span>
+                <span class="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-acid z-10"></span>
+                <span class="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-acid z-10"></span>
+                <span class="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-acid z-10"></span>
+
+                <!-- Gradient overlay -->
+                <div class="absolute inset-0 bg-gradient-to-br from-acid/10 to-transparent"></div>
+
+            </div>
+
+            <!-- Content -->
+            <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="150">
+                <h2 class="font-display leading-[0.92] mb-6" style="font-size: clamp(2.8rem, 5vw, 5rem)">
+                    Sharad Mane<br /><span class="text-acid">Here.</span>
+                </h2>
+                <p class="text-muted leading-[1.9] text-[0.93rem] mb-4">
+                    I am an aspiring MERN Stack Developer passionate about building responsive web applications.
+                    Currently learning MongoDB, Express.js, React, and Node.js while strengthening my frontend skills. I
+                    enjoy creating clean UI and continuously improving through projects. </p>
+                <p class="text-muted leading-[1.9] text-[0.93rem] mb-8">
+                    I enjoy building clean and interactive web experiences that are simple, modern, and user-friendly.
+                    Passionate about learning new technologies, improving problem-solving skills, and turning creative
+                    ideas into real projects.
+                </p>
+                <a href="#contact"
+                    class="font-mono text-[0.68rem] tracking-[0.22em] uppercase text-cream border-b border-muted pb-1 hover:text-acid hover:border-acid transition-colors duration-300">
+                    Let's Connect →
+                </a>
+
+                <!-- Stats -->
+                <div class="flex gap-10 mt-10 pt-10 border-t border-border">
+                    <div>
+                        <div class="font-display text-5xl text-acid leading-none">00+</div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.15em] uppercase text-muted mt-1">Projects</div>
+                    </div>
+                    <div>
+                        <div class="font-display text-5xl text-acid leading-none">00+</div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.15em] uppercase text-muted mt-1">Clients</div>
+                    </div>
+                    <div>
+                        <div class="font-display text-5xl text-acid leading-none">00+</div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.15em] uppercase text-muted mt-1">Years Exp.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Values -->
+        <div class="mt-24">
+            <div class="flex items-center gap-3 mb-10" data-aos="fade-right">
+                <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">Core Values</span>
+                <span class="w-12 h-px bg-border"></span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="relative bg-surface border border-border p-8 overflow-hidden hover:border-acid transition-colors duration-300 group"
+                    data-aos="fade-up" data-aos-delay="0">
+                    <span
+                        class="absolute top-3 right-4 font-display text-5xl text-acid/8 group-hover:text-acid/15 transition-colors">01</span>
+                    <div class="text-2xl mb-5">⚡</div>
+                    <div class="font-display text-2xl tracking-wide mb-3">Value One</div>
+                    <p class="text-muted text-[0.85rem] leading-relaxed">Continuous learning and consistency guide my
+                        work and mindset. I believe in improving step by step, building practical solutions, and
+                        creating experiences that are simple, useful, and user-friendly.</p>
+                </div>
+                <div class="relative bg-surface border border-border p-8 overflow-hidden hover:border-acid transition-colors duration-300 group"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <span
+                        class="absolute top-3 right-4 font-display text-5xl text-acid/8 group-hover:text-acid/15 transition-colors">02</span>
+                    <div class="text-2xl mb-5">🎯</div>
+                    <div class="font-display text-2xl tracking-wide mb-3">Value Two</div>
+                    <p class="text-muted text-[0.85rem] leading-relaxed">Quality means creating clean, reliable, and
+                        user-friendly work with attention to detail. I focus on writing organized code, building
+                        responsive designs, and continuously improving to deliver better results.</p>
+                </div>
+                <div class="relative bg-surface border border-border p-8 overflow-hidden hover:border-acid transition-colors duration-300 group"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <span
+                        class="absolute top-3 right-4 font-display text-5xl text-acid/8 group-hover:text-acid/15 transition-colors">03</span>
+                    <div class="text-2xl mb-5">🤝</div>
+                    <div class="font-display text-2xl tracking-wide mb-3">Value Three</div>
+                    <p class="text-muted text-[0.85rem] leading-relaxed">I value clear communication, teamwork, and a
+                        positive learning environment. I believe strong collaboration comes from sharing ideas,
+                        supporting others, and growing together while working toward a common goal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       03 — WORK
+  ════════════════════════════════════════════════════ -->
+    <section id="work" class="relative px-8 md:px-16 py-28 border-t border-border overflow-hidden">
+
+        <!-- Ghost number -->
+        <span
+            class="pointer-events-none select-none absolute right-[-1rem] top-1/2 -translate-y-1/2 font-display text-[22vw] leading-none text-transparent"
+            style="-webkit-text-stroke: 1px rgba(232,255,0,0.05)">03</span>
+
+        <!-- Label -->
+        <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+            <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">Portfolio</span>
+            <span class="w-12 h-px bg-border"></span>
+        </div>
+
+        <h2 class="font-display leading-[0.9] mb-16" style="font-size: clamp(3.5rem, 8vw, 7rem)" data-aos="fade-up">
+            Selected <span class="text-acid">Work.</span>
+        </h2>
+
+        <!-- Project rows -->
+        <div class="divide-y divide-border">
+
+            <!-- Project 1 -->
+            <div class="group flex items-center gap-6 md:gap-10 py-7 relative cursor-pointer hover:bg-acid/[0.02] transition-colors duration-300 px-2"
+                data-aos="fade-up" data-aos-delay="0">
+                <div
+                    class="font-display text-3xl md:text-4xl text-muted group-hover:text-acid transition-colors duration-300 w-12 shrink-0">
+                    01</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display text-2xl md:text-4xl tracking-wide leading-none mb-2">MiniTV
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <span
+                            class="font-mono text-[0.58rem] tracking-[0.18em] uppercase text-acid border border-border/60 px-3 py-1">Web
+                            Dev</span>
+                        <span class="font-mono text-[0.58rem] tracking-widest text-muted">2026</span>
+                    </div>
+                </div>
+                <div
+                    class="text-acid text-2xl translate-x-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 shrink-0">
+                    ↗</div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="group flex items-center gap-6 md:gap-10 py-7 relative cursor-pointer hover:bg-acid/[0.02] transition-colors duration-300 px-2"
+                data-aos="fade-up" data-aos-delay="60">
+                <div
+                    class="font-display text-3xl md:text-4xl text-muted group-hover:text-acid transition-colors duration-300 w-12 shrink-0">
+                    02</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display text-2xl md:text-4xl tracking-wide leading-none mb-2">Netflix Clone
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <span
+                            class="font-mono text-[0.58rem] tracking-[0.18em] uppercase text-acid border border-border/60 px-3 py-1">Web
+                            Dev</span>
+                        <span class="font-mono text-[0.58rem] tracking-widest text-muted">2026</span>
+                    </div>
+                </div>
+                <div
+                    class="text-acid text-2xl translate-x-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 shrink-0">
+                    ↗</div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="group flex items-center gap-6 md:gap-10 py-7 relative cursor-pointer hover:bg-acid/[0.02] transition-colors duration-300 px-2"
+                data-aos="fade-up" data-aos-delay="120">
+                <div
+                    class="font-display text-3xl md:text-4xl text-muted group-hover:text-acid transition-colors duration-300 w-12 shrink-0">
+                    03</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display text-2xl md:text-4xl tracking-wide leading-none mb-2">Feane
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <span
+                            class="font-mono text-[0.58rem] tracking-[0.18em] uppercase text-acid border border-border/60 px-3 py-1">Web
+                            Dev</span>
+                        <span class="font-mono text-[0.58rem] tracking-widest text-muted">2026</span>
+                    </div>
+                </div>
+                <div
+                    class="text-acid text-2xl translate-x-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 shrink-0">
+                    ↗</div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="group flex items-center gap-6 md:gap-10 py-7 relative cursor-pointer hover:bg-acid/[0.02] transition-colors duration-300 px-2"
+                data-aos="fade-up" data-aos-delay="180">
+                <div
+                    class="font-display text-3xl md:text-4xl text-muted group-hover:text-acid transition-colors duration-300 w-12 shrink-0">
+                    04</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display text-2xl md:text-4xl tracking-wide leading-none mb-2">WoodMart
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <span
+                            class="font-mono text-[0.58rem] tracking-[0.18em] uppercase text-acid border border-border/60 px-3 py-1">E-commerce</span>
+                        <span class="font-mono text-[0.58rem] tracking-widest text-muted">2026</span>
+                    </div>
+                </div>
+                <div
+                    class="text-acid text-2xl translate-x-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 shrink-0">
+                    ↗</div>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="group flex items-center gap-6 md:gap-10 py-7 relative cursor-pointer hover:bg-acid/[0.02] transition-colors duration-300 px-2"
+                data-aos="fade-up" data-aos-delay="240">
+                <div
+                    class="font-display text-3xl md:text-4xl text-muted group-hover:text-acid transition-colors duration-300 w-12 shrink-0">
+                    05</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-display text-2xl md:text-4xl tracking-wide leading-none mb-2">Cybershield
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <span
+                            class="font-mono text-[0.58rem] tracking-[0.18em] uppercase text-acid border border-border/60 px-3 py-1">Full
+                            Stack</span>
+                        <span class="font-mono text-[0.58rem] tracking-widest text-muted">2026</span>
+                    </div>
+                </div>
+                <div
+                    class="text-acid text-2xl translate-x-0 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 shrink-0">
+                    ↗</div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       04 — SKILLS
+  ════════════════════════════════════════════════════ -->
+    <section id="skills" class="relative px-8 md:px-16 py-28 border-t border-border overflow-hidden dot-grid">
+
+        <!-- Ghost number -->
+        <span
+            class="pointer-events-none select-none absolute right-[-1rem] top-1/2 -translate-y-1/2 font-display text-[22vw] leading-none text-transparent"
+            style="-webkit-text-stroke: 1px rgba(232,255,0,0.05)">04</span>
+
+        <!-- Label -->
+        <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+            <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">Expertise</span>
+            <span class="w-12 h-px bg-border"></span>
+        </div>
+
+        <h2 class="font-display leading-[0.9] mb-16" style="font-size: clamp(3.5rem, 8vw, 7rem)" data-aos="fade-up">
+            Skills &<br /><span class="text-acid">Tools.</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+
+            <!-- Dev Skills -->
+            <div data-aos="fade-right" data-aos-duration="1000">
+                <div class="font-display text-2xl tracking-wide border-b border-border pb-4 mb-8">Development</div>
+
+                <div class="space-y-7">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">HTML</span>
+                            <span class="font-display text-xl text-acid">90%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:90%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">CSS</span>
+                            <span class="font-display text-xl text-acid">85%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:85%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">TAILWIND</span>
+                            <span class="font-display text-xl text-acid">80%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:80%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">JAVASCRIPT</span>
+                            <span class="font-display text-xl text-acid">75%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Design Skills -->
+            <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="150">
+                <div class="font-display text-2xl tracking-wide border-b border-border pb-4 mb-8">AUTOMATION</div>
+
+                <div class="space-y-7">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">SELENIUM</span>
+                            <span class="font-display text-xl text-acid">88%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:88%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">TEST NG</span>
+                            <span class="font-display text-xl text-acid">82%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:82%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">jira</span>
+                            <span class="font-display text-xl text-acid">78%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:78%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-mono text-[0.68rem] tracking-[0.15em] uppercase">Canva</span>
+                            <span class="font-display text-xl text-acid">70%</span>
+                        </div>
+                        <div class="h-px bg-border relative overflow-hidden">
+                            <div class="absolute top-0 left-0 h-full bg-acid skill-bar-fill" style="width:70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech chips -->
+        <div class="mt-20" data-aos="fade-up" data-aos-delay="100">
+            <div class="flex items-center gap-3 mb-8">
+                <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">Tech Stack</span>
+                <span class="w-12 h-px bg-border"></span>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    01</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    02</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    03</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    04</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    05</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    06</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    07</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    08</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    09</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    10</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    11</span>
+                <span
+                    class="font-mono text-[0.6rem] tracking-[0.15em] uppercase text-muted border border-border px-4 py-2 hover:border-acid hover:text-acid transition-colors duration-300">Tool
+                    12</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       05 — BLOG
+  ════════════════════════════════════════════════════ -->
+    <section id="blog" class="relative px-8 md:px-16 py-28 border-t border-border overflow-hidden">
+
+        <!-- Ghost number -->
+        <span
+            class="pointer-events-none select-none absolute right-[-1rem] top-1/2 -translate-y-1/2 font-display text-[22vw] leading-none text-transparent"
+            style="-webkit-text-stroke: 1px rgba(232,255,0,0.05)">05</span>
+
+        <!-- Label -->
+        <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+            <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">Writing</span>
+            <span class="w-12 h-px bg-border"></span>
+        </div>
+
+        <h2 class="font-display leading-[0.9] mb-16" style="font-size: clamp(3.5rem, 8vw, 7rem)" data-aos="fade-up">
+            Thoughts &<br /><span class="text-acid">Ideas.</span>
+        </h2>
+
+        <!-- Blog grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <!-- Featured -->
+            <div class="md:col-span-2 bg-surface border border-border group hover:border-acid transition-colors duration-300 flex flex-col"
+                data-aos="fade-up" data-aos-delay="0">
+                <div class="aspect-[21/9] bg-gradient-to-br from-surface to-border/50 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-acid/5 to-transparent"></div>
+                    <span
+                        class="absolute top-4 left-4 font-mono text-[0.58rem] tracking-[0.2em] uppercase text-acid border border-acid/30 px-3 py-1">Featured</span><img src="./building.png" alt="This is the image">
+                </div>
+                <div class="p-7 flex flex-col flex-1"> 
+                    <span class="font-mono text-[0.58rem] tracking-[0.2em] uppercase text-acid mb-3">Design · Month
+                        YYYY</span>
+                    <div class="font-display text-3xl tracking-wide leading-tight mb-3 flex-1">Building Modern Web
+                        Experiences: Creativity, Performance, and Growth
+                    </div>
+                    <p class="text-muted text-[0.85rem] leading-relaxed mb-5">Modern web development is more than just
+                        writing code — it’s about creating smooth, responsive, and user-friendly experiences. A
+                        well-designed website should not only look good but also perform efficiently across all devices.
+                        From clean UI design to optimized performance, every small detail plays an important role in
+                        improving user experience.
+
+                        As an aspiring MERN Stack Developer, I’ve learned that consistency and continuous learning are
+                        the foundation of growth. Building projects, experimenting with new technologies, and solving
+                        real-world problems help improve both technical and creative skills. Every project becomes an
+                        opportunity to write cleaner code, understand better design practices, and create something
+                        meaningful.
+
+                        One of the most important lessons in development is balancing creativity with functionality.
+                        Modern users expect websites to be fast, interactive, and visually appealing. By focusing on
+                        responsive layouts, organized code structure, and smooth user interactions, developers can
+                        create applications that feel professional and engaging.
+
+                        The journey of web development is constantly evolving, and staying curious is the key to
+                        improvement. Learning never stops, and each new challenge helps build stronger problem-solving
+                        abilities and deeper technical understanding.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-border">
+                        <span class="font-mono text-[0.58rem] text-muted">5 min read</span>
+                        <span
+                            class="font-mono text-[0.58rem] text-acid group-hover:translate-x-1 transition-transform duration-300 inline-block">Read
+                            More →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-surface border border-border group hover:border-acid transition-colors duration-300 flex flex-col"
+                data-aos="fade-up" data-aos-delay="80"> 
+                <div class="aspect-video bg-gradient-to-br from-surface to-border/50 relative overflow-hidden"><img src="./Development.png" alt="This is the image">
+                    <div class="absolute inset-0 bg-gradient-to-br from-flame/5 to-transparent"></div>
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <span class="font-mono text-[0.58rem] tracking-[0.2em] uppercase text-acid mb-3">Development</span>
+                    <div class="font-display text-2xl tracking-wide leading-tight mb-3 flex-1">The Future of Web Development</div>
+                    <p class="text-muted text-[0.82rem] leading-relaxed mb-4">Web development is evolving faster than ever. With new frameworks, tools, and technologies emerging regularly, the way we build applications is becoming more efficient, scalable, and user-focused. Modern websites are no longer just static pages — they are dynamic, interactive experiences powered by advanced front-end frameworks, cloud services, and intelligent back-end systems.
+
+The future of web development is driven by performance, accessibility, and seamless user experience. Technologies like React, Node.js, and modern databases are enabling developers to create full-stack applications with better structure and speed. At the same time, responsive design and mobile-first approaches ensure that applications work smoothly on all devices.
+
+Automation and AI are also playing a growing role in development. From code generation to testing and deployment, developers now have powerful tools that increase productivity and reduce errors. This allows more focus on creativity, problem-solving, and building meaningful features.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-border">
+                        <span class="font-mono text-[0.58rem] text-muted">3 min read</span>
+                        <span class="font-mono text-[0.58rem] text-acid">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-surface border border-border group hover:border-acid transition-colors duration-300 flex flex-col"
+                data-aos="fade-up" data-aos-delay="120">
+                <div class="aspect-video bg-gradient-to-br from-surface to-border/50 relative overflow-hidden"> <img src="./Mern.png" alt="image">
+                    <div class="absolute inset-0 bg-gradient-to-br from-acid/5 to-transparent"></div>
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <span class="font-mono text-[0.58rem] tracking-[0.2em] uppercase text-acid mb-3">Opinion</span>
+                    <div class="font-display text-2xl tracking-wide leading-tight mb-3 flex-1">The Power of MERN Stack in Modern Development</div>
+                    <p class="text-muted text-[0.82rem] leading-relaxed mb-4">A short take on why the MERN stack continues to shape fast, scalable, and future-ready web applications.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-border">
+                        <span class="font-mono text-[0.58rem] text-muted">4 min read</span>
+                        <span class="font-mono text-[0.58rem] text-acid">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-surface border border-border group hover:border-acid transition-colors duration-300 flex flex-col"
+                data-aos="fade-up" data-aos-delay="160">
+                <div class="aspect-video bg-gradient-to-br from-surface to-border/50 relative overflow-hidden"><img src="./Application.png" alt="">
+                    <div class="absolute inset-0 bg-gradient-to-br from-flame/5 to-transparent"></div>
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <span class="font-mono text-[0.58rem] tracking-[0.2em] uppercase text-acid mb-3">Tutorial</span>
+                    <div class="font-display text-2xl tracking-wide leading-tight mb-3 flex-1">Building Your First Full-Stack MERN Application</div>
+                    <p class="text-muted text-[0.82rem] leading-relaxed mb-4">A step-by-step guide to setting up MongoDB, Express, React, and Node to create a complete working project from scratch.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-border">
+                        <span class="font-mono text-[0.58rem] text-muted">6 min read</span>
+                        <span class="font-mono text-[0.58rem] text-acid">→</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="bg-surface border border-border group hover:border-acid transition-colors duration-300 flex flex-col"
+                data-aos="fade-up" data-aos-delay="200">
+                <div class="aspect-video bg-gradient-to-br from-surface to-border/50 relative overflow-hidden"><img src="./full stack.png" alt="this is the image">
+                    <div class="absolute inset-0 bg-gradient-to-br from-acid/5 to-transparent"></div>
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                    <span class="font-mono text-[0.58rem] tracking-[0.2em] uppercase text-acid mb-3">Insights</span>
+                    <div class="font-display text-2xl tracking-wide leading-tight mb-3 flex-1">What Makes a Great Full-Stack Developer</div>
+                    <p class="text-muted text-[0.82rem] leading-relaxed mb-4">Key habits, skills, and mindset shifts that help developers build scalable projects and grow in modern web development.</p>
+                    <div class="flex justify-between items-center pt-4 border-t border-border">
+                        <span class="font-mono text-[0.58rem] text-muted">5 min read</span>
+                        <span class="font-mono text-[0.58rem] text-acid">→</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       06 — CONTACT
+  ════════════════════════════════════════════════════ -->
+    <section id="contact" class="relative px-8 md:px-16 py-28 border-t border-border overflow-hidden line-grid">
+
+        <!-- Ghost number -->
+        <span
+            class="pointer-events-none select-none absolute right-[-1rem] top-1/2 -translate-y-1/2 font-display text-[22vw] leading-none text-transparent"
+            style="-webkit-text-stroke: 1px rgba(232,255,0,0.05)">06</span>
+
+        <!-- Label -->
+        <div class="flex items-center gap-3 mb-12" data-aos="fade-right">
+            <span class="font-mono text-[0.62rem] tracking-[0.35em] uppercase text-acid">Contact</span>
+            <span class="w-12 h-px bg-border"></span>
+        </div>
+
+        <h2 class="font-display leading-[0.9] mb-16" style="font-size: clamp(3.5rem, 8vw, 7rem)" data-aos="fade-up">
+            Let's Work<br /><span class="text-acid">Together.</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+
+            <!-- Info -->
+            <div data-aos="fade-right" data-aos-duration="1000">
+                <div class="space-y-8 mb-12">
+                    <div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.22em] uppercase text-muted mb-2">Email</div>
+                        <a href="mailto:your@email.com"
+                            class="text-cream hover:text-acid transition-colors duration-300 text-[0.95rem]">sharadm1012@gmail.com</a>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.22em] uppercase text-muted mb-2">Phone</div>
+                        <a href="tel:+910000000000"
+                            class="text-cream hover:text-acid transition-colors duration-300 text-[0.95rem]">+91 8975978809</a>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.22em] uppercase text-muted mb-2">Location</div>
+                        <span class="text-cream text-[0.95rem]">Pune, India</span>
+                    </div>
+                    <div>
+                        <div class="font-mono text-[0.58rem] tracking-[0.22em] uppercase text-muted mb-2">Availability
+                        </div>
+                        <span class="text-acid text-[0.95rem]">● Open to Work</span>
+                    </div>
+                </div>
+
+                <!-- Socials -->
+                <div class="pt-8 border-t border-border">
+                    <div class="font-mono text-[0.58rem] tracking-[0.22em] uppercase text-muted mb-5">Find Me On</div>
+                    <div class="flex flex-wrap gap-6">
+                        <a href="#"
+                            class="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">LinkedIn</a>
+                        <a href="#"
+                            class="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">GitHub</a>
+                        <a href="#"
+                            class="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Twitter</a>
+                        <a href="#"
+                            class="font-mono text-[0.65rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Dribbble</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="150">
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label
+                                class="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-muted mb-2">First
+                                Name</label>
+                            <input type="text" placeholder="John"
+                                class="w-full bg-surface border border-border text-cream font-body text-[0.92rem] px-4 py-3 outline-none focus:border-acid transition-colors duration-300 placeholder:text-muted" />
+                        </div>
+                        <div>
+                            <label
+                                class="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-muted mb-2">Last
+                                Name</label>
+                            <input type="text" placeholder="Doe"
+                                class="w-full bg-surface border border-border text-cream font-body text-[0.92rem] px-4 py-3 outline-none focus:border-acid transition-colors duration-300 placeholder:text-muted" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-muted mb-2">Email
+                            Address</label>
+                        <input type="email" placeholder="john@example.com"
+                            class="w-full bg-surface border border-border text-cream font-body text-[0.92rem] px-4 py-3 outline-none focus:border-acid transition-colors duration-300 placeholder:text-muted" />
+                    </div>
+                    <div>
+                        <label
+                            class="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-muted mb-2">Subject</label>
+                        <input type="text" placeholder="Project Inquiry"
+                            class="w-full bg-surface border border-border text-cream font-body text-[0.92rem] px-4 py-3 outline-none focus:border-acid transition-colors duration-300 placeholder:text-muted" />
+                    </div>
+                    <div>
+                        <label
+                            class="block font-mono text-[0.58rem] tracking-[0.2em] uppercase text-muted mb-2">Message</label>
+                        <textarea rows="5" placeholder="Tell me about your project..."
+                            class="w-full bg-surface border border-border text-cream font-body text-[0.92rem] px-4 py-3 outline-none focus:border-acid transition-colors duration-300 placeholder:text-muted resize-none"></textarea>
+                    </div>
+                    <button type="button"
+                        class="w-full bg-acid text-ink font-mono text-[0.68rem] tracking-[0.22em] uppercase py-4 btn-clip hover:bg-flame transition-colors duration-300 mt-2">
+                        Send Message →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════════════ -->
+    <footer class="border-t border-border px-8 md:px-16 pt-16 pb-8">
+        <!-- Giant watermark name -->
+        <div class="text-center mb-12 overflow-hidden" data-aos="fade-up">
+            <div class="font-display leading-none select-none text-transparent"
+                style="font-size:clamp(4rem,14vw,12rem); -webkit-text-stroke: 1px rgba(232,255,0,0.08)">
+                SHARAD MANE
+            </div>
+        </div>
+
+        <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 pt-8 border-t border-border">
+            <div>
+                <a href="#home" class="font-display text-3xl tracking-widest text-acid mb-2 block">SM.</a>
+                <p class="font-mono text-[0.6rem] tracking-[0.15em] text-muted uppercase">Creative Developer &amp;
+                    MERN Stack</p>
+            </div>
+            <div class="flex flex-wrap gap-6 md:gap-10">
+                <a href="#home"
+                    class="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Home</a>
+                <a href="#about"
+                    class="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">About</a>
+                <a href="#work"
+                    class="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Work</a>
+                <a href="#skills"
+                    class="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Skills</a>
+                <a href="#blog"
+                    class="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Blog</a>
+                <a href="#contact"
+                    class="font-mono text-[0.62rem] tracking-[0.15em] uppercase text-muted hover:text-acid transition-colors duration-300">Contact</a>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-border">
+            <span class="font-mono text-[0.58rem] tracking-[0.1em] text-muted">© 2026 — Sharad Mane. All Rights
+                Reserved.</span>
+            <span class="font-mono text-[0.58rem] tracking-[0.1em] text-muted">Designed &amp; Built with ♥</span>
+        </div>
+    </footer>
+
+
+    <!-- AOS Init (minimal inline script just for library init — no custom JS) -->
+    <script>
+        AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 60 });
+    </script>
+
+</body>
+
+</html>
